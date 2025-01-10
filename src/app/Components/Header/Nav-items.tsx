@@ -1,10 +1,9 @@
 "use client";
-
 import { useEffect, useState } from "react";
-import { createDirectus, rest, readItems } from "@directus/sdk";
+import { readItems } from "@directus/sdk";
 import Link from "next/link";
+import directus from "@/directus/client";
 
-// Define the structure of the NavItem data
 interface NavItem {
   id: string;
   navList: string;
@@ -15,6 +14,11 @@ export default function NavItems() {
   const [navItems, setNavItems] = useState<NavItem[]>([]);
   const apiUrl = process.env.NEXT_PUBLIC_DIRECTUS_API_URL;
 
+  // Utility function to capitalize the first letter of a string
+  function capitalizeFirstLetter(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   useEffect(() => {
     async function fetchNavItems() {
       if (!apiUrl) {
@@ -23,13 +27,10 @@ export default function NavItems() {
         );
         return;
       }
-
-      const directus = createDirectus(apiUrl).with(rest());
-
       try {
         // Fetch all items from the 'Header' collection
-        const response = await directus.request(readItems<NavItem[]>("Header"));
-        setNavItems(response || []); // Ensure we handle empty responses gracefully
+        const response = await directus.request(readItems("Header"));
+        setNavItems(response as NavItem[]);
       } catch (error) {
         console.error("Error fetching navigation items:", error);
       }
@@ -45,13 +46,21 @@ export default function NavItems() {
       {navItems.length > 0 ? (
         <ul className="flex flex-col justify-center items-center md:flex-row  gap-4">
           {navItems.map((item) => (
-            <li key={item.id} className="hover:font-semibold cursor-pointer">
-              <Link href={item.slug}>{item.navList}</Link>
+            <li
+              key={item.id}
+              className="hover:font-semibold uppercase border-b md:border-none cursor-pointer"
+            >
+              <Link
+                href={`${capitalizeFirstLetter(item.slug)}`}
+                className="hover:font-semibold"
+              >
+                {item.navList}
+              </Link>
             </li>
           ))}
         </ul>
       ) : (
-        <p>Loading...</p> // Show a loading indicator while fetching data
+        <p>Loading...</p>
       )}
     </nav>
   );

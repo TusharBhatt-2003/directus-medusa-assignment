@@ -1,7 +1,7 @@
 "use client";
-
 import { useEffect, useState } from "react";
-import { createDirectus, rest, readItems } from "@directus/sdk";
+import directus from "@/directus/client";
+import { readItems } from "@directus/sdk";
 
 interface PaymentMethods {
   id: string;
@@ -15,18 +15,18 @@ export default function PaymentMethods() {
 
   useEffect(() => {
     async function fetchMethods() {
-      const directus = createDirectus(apiUrl).with(rest());
-
       try {
-        const response = await directus.request(
-          readItems<PaymentMethods[]>("Payment_Methods"),
-        );
-        setMethods(response || []); // Handle empty responses gracefully
+        const response = await directus.request(readItems("Payment_Methods"));
+        if (Array.isArray(response)) {
+          setMethods(response as PaymentMethods[]);
+        } else {
+          setMethods([]);
+        }
       } catch (error) {
         console.error("Error fetching payment methods:", error);
+        setMethods([]);
       }
     }
-
     fetchMethods();
   }, [apiUrl]);
 

@@ -33,10 +33,10 @@ export default function MenuIcon() {
       {/* Conditional Rendering of NavItems */}
       {isNavVisible && (
         <div
-          className="fixed inset-0 flex items-center justify-center  z-50"
+          className="fixed inset-0 h-screen flex items-center justify-center  z-50"
           onClick={closeNav}
         >
-          <div className="bg-black p-4 rounded-xl bg-opacity-60 backdrop-blur shadow-lg">
+          <div className="bg-black p-4 rounded-xl bg-opacity-80 backdrop-blur-lg shadow-lg">
             <NavItems />
           </div>
         </div>

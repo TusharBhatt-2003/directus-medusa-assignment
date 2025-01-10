@@ -1,43 +1,47 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
-import { createDirectus, rest, readItems } from "@directus/sdk";
+import { readItems } from "@directus/sdk";
+import directus from "@/directus/client";
 import Link from "next/link";
 
 interface Logo {
-  logoImg: string;
   id: string;
+  logoImg: string;
 }
 
-export default function Logo() {
-  const [LOGO_img, set_LOGO_img] = useState<Logo>;
+export default function LogoComponent() {
+  const [LOGOimg, setLOGOimg] = useState<Logo>();
   const apiUrl = process.env.NEXT_PUBLIC_DIRECTUS_API_URL as string;
 
   useEffect(() => {
-    async function fetchHeroData() {
-      const directus = createDirectus(apiUrl).with(rest());
+    async function fetchLogo() {
       try {
-        // Fetch all items from the 'Hero' collection
-        const response = await directus.request(readItems<Logo>("Logo"));
-        set_LOGO_img(response || []); // Handle empty responses gracefully
+        // Fetch the data from the 'Logo' collection
+        const response = await directus.request(readItems("Logo"));
+        setLOGOimg(response);
       } catch (error) {
-        console.error("Error fetching hero data:", error);
+        console.error("Error fetching logo data:", error);
       }
     }
 
-    fetchHeroData();
+    fetchLogo();
   }, [apiUrl]);
 
   return (
-    <div className="md:border-r border-[#FFFFFF33] md:px-10 flex justify-center items-center">
-      <Image
-        src={`${apiUrl}/assets/${LOGO_img.logoImg}`}
-        priority
-        alt="Logo"
-        width={100}
-        height={100}
-        className="h-auto w-auto"
-      />
+    <div className="md:border-r border-[#FFFFFF33]  lg:px-10 flex justify-center items-center">
+      {LOGOimg ? (
+        <Link href="/">
+          <img
+            src={`${apiUrl}/assets/${LOGOimg.logoImg}`}
+            alt="Logo"
+            width={200}
+            height={200}
+            className="h-auto w-auto"
+          />
+        </Link>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 }

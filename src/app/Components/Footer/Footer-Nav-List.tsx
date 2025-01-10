@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createDirectus, rest, readItems } from "@directus/sdk";
+import { readItems } from "@directus/sdk";
 import Link from "next/link";
+import directus from "@/directus/client";
 
 interface FooterNavList {
   navList: NavListData[];
@@ -26,6 +27,11 @@ export default function FooterNavList() {
   const [navList, setNavList] = useState<NavListData[]>([]);
   const apiUrl = process.env.NEXT_PUBLIC_DIRECTUS_API_URL;
 
+  // Utility function to capitalize the first letter of a string
+  function capitalizeFirstLetter(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   useEffect(() => {
     async function fetchNavItems() {
       if (!apiUrl) {
@@ -34,18 +40,15 @@ export default function FooterNavList() {
         );
         return;
       }
-
-      const directus = createDirectus(apiUrl).with(rest());
-
       try {
         // Fetch all items from the 'FooterNavHeading' and 'FooterNavList' collections
         const [headingResponse, listResponse] = await Promise.all([
-          directus.request(readItems<NavHeadingData[]>("FooterNavHeading")),
-          directus.request(readItems<NavListData[]>("FooterNavList")),
+          directus.request(readItems("FooterNavHeading")),
+          directus.request(readItems("FooterNavList")),
         ]);
 
-        setNavHeading(headingResponse || []); // Handle empty responses gracefully
-        setNavList(listResponse || []); // Handle empty responses gracefully
+        setNavHeading(headingResponse as NavHeadingData[]);
+        setNavList(listResponse as NavListData[]);
       } catch (error) {
         console.error("Error fetching navigation items:", error);
       }
@@ -59,24 +62,26 @@ export default function FooterNavList() {
       <div className="grid gap-5 grid-cols-2 lg:flex justify-between md:mr-10">
         {navHeading.length > 0 ? (
           navHeading.map((heading) => (
-            <div
+            <nav
               key={heading.id}
               className="flex capitalize flex-col space-y-2"
             >
               <h2 className="text-xl font-bold">{heading.Heading}</h2>
-              {/* You can now map through the associated navList for each heading */}
               <ul>
                 {navList
-                  .filter((item) => item.navlist === heading.id) // Assuming there's a relationship between heading and navlist
+                  .filter((item) => item.navlist === heading.id)
                   .map((item) => (
                     <li key={item.id}>
-                      <Link href={item.slug} className="hover:font-semibold">
+                      <Link
+                        href={`/${capitalizeFirstLetter(item.slug)}`}
+                        className="hover:font-semibold"
+                      >
                         {item.name}
                       </Link>
                     </li>
                   ))}
               </ul>
-            </div>
+            </nav>
           ))
         ) : (
           <p>No navigation headings found</p>
