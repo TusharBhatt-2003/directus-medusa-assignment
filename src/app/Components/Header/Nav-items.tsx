@@ -14,11 +14,6 @@ export default function NavItems() {
   const [navItems, setNavItems] = useState<NavItem[]>([]);
   const apiUrl = process.env.NEXT_PUBLIC_DIRECTUS_API_URL;
 
-  // Utility function to capitalize the first letter of a string
-  function capitalizeFirstLetter(str: string): string {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
   useEffect(() => {
     async function fetchNavItems() {
       if (!apiUrl) {
@@ -50,10 +45,7 @@ export default function NavItems() {
               key={item.id}
               className="hover:font-semibold uppercase border-b md:border-none cursor-pointer"
             >
-              <Link
-                href={`${capitalizeFirstLetter(item.slug)}`}
-                className="hover:font-semibold"
-              >
+              <Link href={item.slug} className="hover:font-semibold">
                 {item.navList}
               </Link>
             </li>

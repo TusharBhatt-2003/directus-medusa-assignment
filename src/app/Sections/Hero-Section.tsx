@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Button from "../Components/Button/Button";
-import { createDirectus, rest, readItems } from "@directus/sdk";
+import { createDirectus, rest, readItems, readSingleton } from "@directus/sdk";
 import HeroContent from "../Components/Content/HeroContent";
 import HeadingDescription from "../Components/Heading-Description/Heading-Description";
 import Link from "next/link";
@@ -23,7 +23,7 @@ export default function HeroSection() {
       const directus = createDirectus(apiUrl).with(rest());
       try {
         // Fetch all items from the 'Hero' collection
-        const response = await directus.request(readItems("Hero"));
+        const response = await directus.request(readSingleton("Hero"));
         setHeroData(response as Hero[]);
       } catch (error) {
         console.error("Error fetching hero data:", error);
@@ -53,7 +53,7 @@ export default function HeroSection() {
             className=""
           />
           <div className="md:w-[60%] lg:w-[30%]">
-            <Link href="/Category/Accessories">
+            <Link href="/category/220mp">
               <Button text={heroData.btnText} icon={true} />
             </Link>
           </div>

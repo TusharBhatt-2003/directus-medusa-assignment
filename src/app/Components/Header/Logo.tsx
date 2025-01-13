@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { readItems } from "@directus/sdk";
+import { readSingleton } from "@directus/sdk";
 import directus from "@/directus/client";
 import Link from "next/link";
 
@@ -17,8 +17,8 @@ export default function LogoComponent() {
     async function fetchLogo() {
       try {
         // Fetch the data from the 'Logo' collection
-        const response = await directus.request(readItems("Logo"));
-        setLOGOimg(response);
+        const response = await directus.request(readSingleton("Logo"));
+        setLOGOimg(response as Logo);
       } catch (error) {
         console.error("Error fetching logo data:", error);
       }

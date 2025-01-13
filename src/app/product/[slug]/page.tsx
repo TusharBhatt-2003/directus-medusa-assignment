@@ -6,6 +6,8 @@ import directus from "@/directus/client";
 import ProductDetails from "@/app/Components/Product/ProductDetails";
 import ProductImages from "@/app/Components/Product/ProductImages";
 import CustomerService from "@/app/Components/Product/CustomerService";
+import Button from "@/app/Components/Button/Button";
+import Options from "@/app/Components/Product/Options";
 
 interface ProductData {
   id: number;
@@ -134,7 +136,12 @@ export default function Page() {
 
   return (
     <div className="container h-full bg-white py-20">
-      <div className="grid grid-cols-1 md:grid-cols-2">
+      <div className="flex w-full my-5 md:m-5  items-center gap-2 font-semibold">
+        <p className="text-[#737373]">{matchedCategory?.Category}</p>
+        <img src="/greaterThan.svg" alt="direction" />
+        <p>{currentProduct.productName}</p>
+      </div>
+      <div className="grid grid-cols-1 lg:h-screen md:grid-cols-2">
         <div className="h-full">
           {/* Pass the product image IDs to the ProductImages component */}
           <ProductImages imageIds={productImageIds} />
@@ -147,6 +154,23 @@ export default function Page() {
             productDiscount="25% or $200"
             productDesc={currentProduct.productDesc}
           />
+          <Options />
+          <div className="bg-[#FAFAFA] space-y-2 p-5 rounded-lg my-5">
+            <p className="font-bold text-xl">
+              {currentProduct.productPrice} AUD
+            </p>
+            <p className="text-red-600 font-normal">
+              <span className="font-semibold text-[#737373] text-sm line-through">
+                {" "}
+                {currentProduct.productPrice} AUD
+              </span>{" "}
+              save "25% or $200"
+            </p>
+            <p className="text-[#737373]">
+              or $27.75/month with 36-month financing*, before trade-in
+            </p>
+            <Button text="add to cart" cart={true} />
+          </div>
           <CustomerService />
         </div>
       </div>

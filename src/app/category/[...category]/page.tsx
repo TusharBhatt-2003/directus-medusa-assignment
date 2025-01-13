@@ -5,6 +5,7 @@ import { FiChevronDown } from "react-icons/fi";
 import ProductCard from "../../Components/Accessories/ProductCard/ProductCard";
 import directus from "@/directus/client";
 import { readItems } from "@directus/sdk";
+import { useParams } from "next/navigation";
 
 interface ProductData {
   id: string;
@@ -24,6 +25,7 @@ export default function Page() {
   const [productData, setProductData] = useState<ProductData[]>([]);
   const [productFiles, setProductFiles] = useState<ProductDataFile[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null); // Track the selected category
+  const { category } = useParams(); // Get the current category from the route
   const apiUrl = process.env.NEXT_PUBLIC_DIRECTUS_API_URL;
 
   useEffect(() => {
@@ -59,8 +61,6 @@ export default function Page() {
     fetchProductData();
   }, [apiUrl]);
 
-  //console.log(productFiles);
-
   // Function to get the directus_files_id for the product images
   function getImage(productId: string): string | undefined {
     const matchingFile = productFiles.find(
@@ -76,12 +76,17 @@ export default function Page() {
       )
     : productData;
 
+  // Convert the category parameter to a readable string
+  const categorySlug = Array.isArray(category)
+    ? category.join(" / ")
+    : category;
+
   return (
     <div className="container bg-[#FAFAFA] py-20">
       <Categories setSelectedCategory={setSelectedCategory} />
       <main className="md:m-10">
         <div className="flex my-5 justify-between">
-          <h1 className="uppercase text-xl font-semibold"></h1>
+          <h1 className="uppercase text-xl font-semibold">{categorySlug}</h1>
           <div className="flex gap-2 items-center">
             <p className="text-[#737373]">Sort by:</p>
             <p className="font-semibold flex items-center">
