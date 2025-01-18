@@ -4,8 +4,6 @@ interface HeadingProps {
 
 export default function Heading({ heading }: HeadingProps) {
   return (
-    <div className="text-white w-full font-semibold uppercase text-2xl ">
-      {heading}
-    </div>
+    <div className="w-full font-semibold uppercase text-2xl ">{heading}</div>
   );
 }

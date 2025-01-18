@@ -50,7 +50,7 @@ export default function HeroSection() {
             subtitle={heroData.heroTitle}
             heading={heroData.heroPara}
             desc=""
-            className=""
+            className="text-white"
           />
           <div className="md:w-[60%] lg:w-[30%]">
             <Link href="/category/220mp">

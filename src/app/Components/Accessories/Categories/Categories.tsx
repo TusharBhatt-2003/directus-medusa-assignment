@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import directus from "@/directus/client";
 import { readItems } from "@directus/sdk";
+import { motion } from "motion/react";
 
 interface categories {
   id: number;
@@ -37,9 +38,11 @@ export default function Categories({ setSelectedCategory }: CategoriesProps) {
   }, [apiUrl]);
 
   return (
-    <div className="flex overflow-x-scroll scroll-smooth hide-scrollbar gap-2 w-full justify-center items-center border-b bg-white">
+    <div className="flex overflow-x-scroll scroll-smooth hide-scrollbar gap-2 w-full justify-center items-center border-b bg-white select-none">
       {categories.map((category) => (
-        <div
+        <motion.div
+          whileHover={{ scale: 1.5 }}
+          whileTap={{ scale: 0.65 }}
           key={category.id}
           onClick={() => setSelectedCategory(category.id)} // Update the selected category
           className={`p-5 md:p-10 w-52 flex flex-col justify-between text-center items-center uppercase font-semibold hover:bg-[#FAFAFA] rounded-lg cursor-pointer`}
@@ -58,7 +61,7 @@ export default function Categories({ setSelectedCategory }: CategoriesProps) {
             />
           )}
           <h3>{category.Category}</h3>
-        </div>
+        </motion.div>
       ))}
     </div>
   );

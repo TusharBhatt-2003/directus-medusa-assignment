@@ -89,7 +89,7 @@ export default function ContentSection() {
     <div className="p-10 container h-full ">
       <section className="h-screen flex flex-col items-center justify-center w-full gap-10">
         <HeadingDescription
-          className="text-center space-y-2 md:w-[60%] "
+          className="text-center text-white space-y-2 md:w-[60%] "
           subtitle=""
           heading={HIWdata.heading}
           desc={HIWdata.desc}
@@ -104,7 +104,7 @@ export default function ContentSection() {
       </section>
       <section className="h-screen flex flex-col items-center justify-center w-full gap-10">
         <HeadingDescription
-          className="text-center space-y-2 md:w-[60%] "
+          className="text-center text-white space-y-2 md:w-[60%] "
           subtitle=""
           heading={OPdata.heading}
           desc={OPdata.desc}

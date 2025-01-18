@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { motion } from "motion/react";
 interface ProductImagesProps {
   imageIds: string[]; // Define the prop type as an array of strings
 }
@@ -29,27 +29,29 @@ export default function ProductImages({ imageIds }: ProductImagesProps) {
           <img
             src={`${apiUrl}/assets/${currentImage}`}
             alt="Main Product Image"
-            className="w-full h-full object-cover rounded-xl"
+            className="w-full h-full object-contain rounded-xl"
           />
         </div>
       )}
 
       {/* Horizontal scrollable image list */}
       <div className="flex space-x-4 overflow-x-auto w-full max-w-[600px] hide-scrollbar">
-        {imageIds.slice(1).map((imageId) => (
-          <div
+        {imageIds.map((imageId) => (
+          <motion.div
+            whileHover={{ scale: 0.9 }}
+            whileTap={{ scale: 0.65 }}
             key={imageId}
-            className={`flex-shrink-0 bg-[#F5F5F5] rounded-lg w-[80px] h-[80px] cursor-pointer border-2  ${
+            className={`flex-shrink-0 bg-[#F5F5F5] rounded-lg w-[80px] h-[80px] cursor-pointer border-4  ${
               currentImage === imageId ? "border-[#107C11]" : "border-[#F5F5F5]"
             }`}
           >
             <img
               src={`${apiUrl}/assets/${imageId}`}
               alt={`Product Thumbnail ${imageId}`}
-              className="w-full h-full object-cover rounded-md"
+              className="w-full h-full object-contain rounded"
               onClick={() => handleThumbnailClick(imageId)}
             />
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
